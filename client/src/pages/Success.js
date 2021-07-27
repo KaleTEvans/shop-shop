@@ -28,7 +28,7 @@ function Success() {
 
 		saveOrder();
 	}, [addOrder]);
-    
+
     return (
       <div>
         <Jumbotron>
@@ -42,4 +42,6 @@ function Success() {
         </Jumbotron>
       </div>
     );
-  };
+};
+
+export default Success;

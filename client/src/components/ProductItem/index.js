@@ -1,9 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { pluralize } from "../../utils/helpers";
-import { useStoreContext } from '../../utils/GlobalState';
-import { ADD_TO_CART, UPDATE_CART_QUANTITY } from '../../utils/actions';
+// import { useStoreContext } from '../../utils/GlobalState';
+// import { ADD_TO_CART, UPDATE_CART_QUANTITY } from '../../utils/actions';
 import { idbPromise } from "../../utils/helpers";
+
+import { useSelector, useDispatch } from 'react-redux';
+import { addedToCart, updatedQuantityInCart } from '../../utils/cartSlice';
 
 function ProductItem(item) {
   const {
@@ -14,27 +17,22 @@ function ProductItem(item) {
     quantity
   } = item;
 
-  const [state, dispatch] = useStoreContext();
-
-  const { cart } = state;
+  const { cart } = useSelector(state => state.cart);
+  const dispatch = useDispatch();
 
   const addToCart = () => {
     const itemInCart = cart.find((cartItem) => cartItem._id === _id)
     if (itemInCart) {
-      dispatch({
-        type: UPDATE_CART_QUANTITY,
+      dispatch(updatedQuantityInCart({
         _id: _id,
         purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 1
-      });
+      }));
       idbPromise('cart', 'put', {
         ...itemInCart,
         purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 1
       });
     } else {
-      dispatch({
-        type: ADD_TO_CART,
-        product: { ...item, purchaseQuantity: 1 }
-      });
+      dispatch(addedToCart({ ...item, purchaseQuantity: 1 }));
       idbPromise('cart', 'put', { ...item, purchaseQuantity: 1 });
     }
   }
