@@ -16,7 +16,7 @@ function ProductList() {
   const { currentCategory } = useSelector(state => state.categories)
 
   const { loading, data: productData } = useQuery(QUERY_PRODUCTS);
-  const { products } = useSelector(state => state.categories);
+  const { products } = useSelector(state => state.products);
 
   const dispatch = useDispatch();
 
